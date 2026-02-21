@@ -34,16 +34,34 @@
 <body class="bg-jb-bg text-jb-text font-sans min-h-screen selection:bg-jb-blue/30 selection:text-white overflow-x-hidden">
 
     <nav class="fixed w-full top-0 z-50 bg-jb-bg/80 backdrop-blur-md border-b border-jb-border">
-        <div class="max-w-6xl mx-auto p-5 flex justify-between items-center nav-container">
+        <div class="max-w-6xl mx-auto p-5 flex justify-between items-center nav-container relative z-50 bg-transparent">
             <div class="text-xl font-bold tracking-wider text-white nav-logo">
                 <a href="#" class="hover:text-jb-blue transition-colors">&lt;RAMANSH.DEV/&gt;</a>
             </div>
             
-            <div class="hidden md:flex space-x-8 text-sm font-mono text-jb-text">
+            <div class="hidden md:flex space-x-8 text-sm font-mono text-jb-text items-center">
                 <a href="#work" class="nav-link hover:text-white transition-colors"><span class="text-jb-orange">val</span> work</a>
                 <a href="#projects" class="nav-link hover:text-white transition-colors"><span class="text-jb-orange">val</span> projects</a>
                 <a href="#contact" class="nav-link hover:text-jb-blue transition-colors"><span class="text-jb-orange">fun</span> contact()</a>
+                <a href="resume.pdf" target="_blank" download class="nav-link flex items-center gap-2 bg-jb-green/10 text-jb-green border border-jb-green/30 hover:bg-jb-green/20 hover:border-jb-green px-4 py-1.5 rounded transition-colors duration-300">
+                    <span class="text-xs">▶</span> build_cv.pdf
+                </a>
             </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-jb-text hover:text-white focus:outline-none p-2 nav-link">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="fixed top-0 left-0 w-full h-screen bg-jb-bg/95 backdrop-blur-xl flex flex-col items-center justify-center space-y-8 transform -translate-y-full transition-transform duration-300 ease-in-out z-40 md:hidden">
+            <a href="#work" class="mobile-link text-2xl font-mono text-jb-text hover:text-white"><span class="text-jb-orange">val</span> work</a>
+            <a href="#projects" class="mobile-link text-2xl font-mono text-jb-text hover:text-white"><span class="text-jb-orange">val</span> projects</a>
+            <a href="#contact" class="mobile-link text-2xl font-mono text-jb-text hover:text-jb-blue"><span class="text-jb-orange">fun</span> contact()</a>
+            <a href="resume.pdf" target="_blank" download class="mobile-link mt-4 flex items-center gap-2 bg-jb-green/10 text-jb-green border border-jb-green/30 px-6 py-3 rounded text-xl">
+                <span class="text-lg">▶</span> build_cv.pdf
+            </a>
         </div>
     </nav>
 
@@ -88,7 +106,7 @@
                     <img src="pic.png" alt="Ramansh Sharma" class="w-full h-full object-cover bg-jb-surface">
                 </div>
 
-                <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-4 z-20 bg-jb-surface/90 backdrop-blur-md border border-jb-border p-3 rounded-xl shadow-xl flex items-center gap-3 w-max max-w-none hero-badge"> 
+                <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 md:-bottom-6 md:left-auto md:translate-x-0 md:-right-4 z-20 bg-jb-surface/90 backdrop-blur-md border border-jb-border p-3 rounded-xl shadow-xl flex items-center gap-3 w-max max-w-none hero-badge"> 
                     <div class="w-10 h-10 bg-jb-bg rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-jb-border">
                         <span class="text-jb-green text-xl">⚡</span>
                     </div>
@@ -428,6 +446,34 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", (event) => {
+            // --- MOBILE MENU LOGIC ---
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                if (isMenuOpen) {
+                    // Slide menu down, change icon to X, disable body scroll
+                    menu.classList.remove('-translate-y-full');
+                    icon.setAttribute('d', 'M6 18L18 6M6 6l12 12'); 
+                    document.body.style.overflow = 'hidden'; 
+                } else {
+                    // Slide menu up, change icon to hamburger, enable body scroll
+                    menu.classList.add('-translate-y-full');
+                    icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); 
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            btn.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
             gsap.registerPlugin(ScrollTrigger);
 
             // Master Timeline for initial load
