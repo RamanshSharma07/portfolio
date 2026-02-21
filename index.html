@@ -492,7 +492,9 @@
                 console.error('Failed to copy text: ', err);
             }
         });
+
         document.addEventListener("DOMContentLoaded", (event) => {
+            
             // --- MOBILE MENU LOGIC ---
             const btn = document.getElementById('mobile-menu-btn');
             const menu = document.getElementById('mobile-menu');
@@ -521,221 +523,240 @@
             mobileLinks.forEach(link => {
                 link.addEventListener('click', toggleMenu);
             });
-            gsap.registerPlugin(ScrollTrigger);
 
-            // Master Timeline for initial load
-            const tl = gsap.timeline();
 
-            // 1. Animate Navigation
-            tl.from(".nav-logo", { y: -20, opacity: 0, duration: 0.6, ease: "power3.out" })
-              .from(".nav-link", { y: -20, opacity: 0, duration: 0.4, stagger: 0.1, ease: "power3.out" }, "-=0.4");
+            // --- ACCESSIBILITY CHECK FOR ANIMATIONS ---
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            // 2. Reveal Hero Text (staggered from the bottom up)
-            tl.from(".hero-text", { 
-                y: 50, 
-                opacity: 0, 
-                duration: 0.8, 
-                stagger: 0.15, 
-                ease: "power4.out" 
-            }, "-=0.2");
+            if (prefersReducedMotion) {
+                // ACCESSIBILITY MODE: No animations. 
+                // We must remove the 'opacity-0' classes so the content isn't invisible!
+                const hiddenElements = document.querySelectorAll('.opacity-0');
+                hiddenElements.forEach(el => {
+                    el.classList.remove('opacity-0');
+                });
+                
+                console.log("Reduced motion enabled: Animations disabled for accessibility.");
 
-            // 3. Reveal Buttons
-            tl.from(".hero-btn", { 
-                y: 20, 
-                opacity: 0, 
-                duration: 0.5, 
-                stagger: 0.1, 
-                ease: "power2.out" 
-            }, "-=0.4");
+            } else {
+                // STANDARD MODE: Run all GSAP Animations
+                gsap.registerPlugin(ScrollTrigger);
 
-            // 4. Reveal Image Container (scale up)
-            tl.from(".hero-image-container", { 
-                scale: 0.8, 
-                opacity: 0, 
-                duration: 1, 
-                ease: "back.out(1.5)" 
-            }, "-=1");
+                // Master Timeline for initial load
+                const tl = gsap.timeline();
 
-            // 5. Pop in the badge
-            tl.from(".hero-badge", { 
-                scale: 0, 
-                opacity: 0, 
-                duration: 0.6, 
-                ease: "back.out(2)" 
-            }, "-=0.5");
+                // 1. Animate Navigation
+                tl.from(".nav-logo", { y: -20, opacity: 0, duration: 0.6, ease: "power3.out" })
+                .from(".nav-link", { y: -20, opacity: 0, duration: 0.4, stagger: 0.1, ease: "power3.out" }, "-=0.4");
 
-            // 6. Continuous Floating Animation (replaces CSS @keyframes)
-            gsap.to(".hero-float", {
-                y: -15,
-                duration: 2.5,
-                ease: "sine.inOut",
-                yoyo: true,
-                repeat: -1,
-                delay: 0.5 // Start after initial reveal
-            });
-            // --- SCROLL REVEAL: WORK EXPERIENCE ---
-            
-            // Animate the section header
-            gsap.to(".work-header", {
-                scrollTrigger: {
-                    trigger: "#work",
-                    start: "top 80%", // Triggers when the top of #work hits 80% down the viewport
-                    toggleActions: "play none none reverse" // Reverses if you scroll back up
-                },
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: "power3.out"
-            });
+                // 2. Reveal Hero Text (staggered from the bottom up)
+                tl.from(".hero-text", { 
+                    y: 50, 
+                    opacity: 0, 
+                    duration: 0.8, 
+                    stagger: 0.15, 
+                    ease: "power4.out" 
+                }, "-=0.2");
 
-            // Setup starting position for header
-            gsap.set(".work-header", { y: 30 });
+                // 3. Reveal Buttons
+                tl.from(".hero-btn", { 
+                    y: 20, 
+                    opacity: 0, 
+                    duration: 0.5, 
+                    stagger: 0.1, 
+                    ease: "power2.out" 
+                }, "-=0.4");
 
-            // Animate each timeline item one by one as they enter the screen
-            const timelineItems = gsap.utils.toArray('.timeline-item');
-            
-            timelineItems.forEach((item, i) => {
-                gsap.fromTo(item, 
-                    { opacity: 0, x: -50 }, // Start off-screen to the left
-                    {
-                        scrollTrigger: {
-                            trigger: item,
-                            start: "top 85%", // Trigger slightly before it comes fully into view
-                            toggleActions: "play none none reverse"
-                        },
-                        opacity: 1,
-                        x: 0,
-                        duration: 0.6,
-                        ease: "back.out(1.2)" // Gives a slight "snap" into place
-                    }
-                );
-            });
+                // 4. Reveal Image Container (scale up)
+                tl.from(".hero-image-container", { 
+                    scale: 0.8, 
+                    opacity: 0, 
+                    duration: 1, 
+                    ease: "back.out(1.5)" 
+                }, "-=1");
 
-            // --- SCROLL REVEAL: FEATURED PROJECTS ---
-            
-            // Animate Header & GitHub button
-            gsap.to(".projects-header", {
-                scrollTrigger: {
-                    trigger: "#projects",
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.2, // Brings the title, then the button
-                ease: "power3.out"
-            });
-            gsap.set(".projects-header", { y: 20 });
+                // 5. Pop in the badge
+                tl.from(".hero-badge", { 
+                    scale: 0, 
+                    opacity: 0, 
+                    duration: 0.6, 
+                    ease: "back.out(2)" 
+                }, "-=0.5");
 
-            // Animate the closing bracket at the bottom
-            gsap.to(".projects-footer", {
-                scrollTrigger: {
-                    trigger: ".projects-grid",
-                    start: "bottom 90%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 1,
-                duration: 1,
-                ease: "power2.out"
-            });
+                // 6. Continuous Floating Animation (replaces CSS @keyframes)
+                gsap.to(".hero-float", {
+                    y: -15,
+                    duration: 2.5,
+                    ease: "sine.inOut",
+                    yoyo: true,
+                    repeat: -1,
+                    delay: 0.5 // Start after initial reveal
+                });
 
-            // Stagger the Project Cards
-            // We use a slight rotation to make them feel like cards falling into place
-            const projectCards = gsap.utils.toArray('.project-card');
-            
-            gsap.fromTo(projectCards, 
-                { opacity: 0, y: 50, rotationX: -10 }, 
-                {
+                // --- SCROLL REVEAL: WORK EXPERIENCE ---
+                
+                // Animate the section header
+                gsap.to(".work-header", {
                     scrollTrigger: {
-                        trigger: ".projects-grid",
-                        start: "top 75%", 
+                        trigger: "#work",
+                        start: "top 80%", // Triggers when the top of #work hits 80% down the viewport
+                        toggleActions: "play none none reverse" // Reverses if you scroll back up
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+
+                // Setup starting position for header
+                gsap.set(".work-header", { y: 30 });
+
+                // Animate each timeline item one by one as they enter the screen
+                const timelineItems = gsap.utils.toArray('.timeline-item');
+                
+                timelineItems.forEach((item, i) => {
+                    gsap.fromTo(item, 
+                        { opacity: 0, x: -50 }, // Start off-screen to the left
+                        {
+                            scrollTrigger: {
+                                trigger: item,
+                                start: "top 85%", // Trigger slightly before it comes fully into view
+                                toggleActions: "play none none reverse"
+                            },
+                            opacity: 1,
+                            x: 0,
+                            duration: 0.6,
+                            ease: "back.out(1.2)" // Gives a slight "snap" into place
+                        }
+                    );
+                });
+
+                // --- SCROLL REVEAL: FEATURED PROJECTS ---
+                
+                // Animate Header & GitHub button
+                gsap.to(".projects-header", {
+                    scrollTrigger: {
+                        trigger: "#projects",
+                        start: "top 80%",
                         toggleActions: "play none none reverse"
                     },
                     opacity: 1,
                     y: 0,
-                    rotationX: 0,
-                    duration: 0.6,
-                    stagger: 0.15, // Delay between each card appearing
+                    duration: 0.8,
+                    stagger: 0.2, // Brings the title, then the button
                     ease: "power3.out"
-                }
-            );
-
-            // --- SCROLL REVEAL: CONTACT & FOOTER ---
-            
-            // 1. Reveal the Terminal Window
-            gsap.to(".contact-terminal", {
-                scrollTrigger: {
-                    trigger: "#contact",
-                    start: "top 80%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: "power3.out"
-            });
-            gsap.set(".contact-terminal", { y: 30 });
-
-            // 2. Stagger the Terminal Lines to simulate command execution
-            const terminalLines = gsap.utils.toArray('.terminal-line');
-            gsap.to(terminalLines, {
-                scrollTrigger: {
-                    trigger: ".contact-terminal",
-                    start: "top 70%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 1,
-                x: 0,
-                duration: 0.4,
-                stagger: 0.3, // Waits 0.3 seconds between each line appearing
-                ease: "power2.out"
-            });
-            gsap.set(terminalLines, { x: -10 }); // Start slightly to the left
-
-            // 3. Fade in the Footer
-            gsap.to(".footer-content", {
-                scrollTrigger: {
-                    trigger: "footer",
-                    start: "top 95%",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: "power2.out"
-            });
-            gsap.set(".footer-content", { y: 20 });
-
-            // --- SCROLLSPY: ACTIVE NAVIGATION ---
-            // 1. Grab all sections that have an ID (Work, Projects, Contact)
-            const sections = document.querySelectorAll("section[id]");
-            // 2. Grab all internal navigation links (both desktop and mobile)
-            const navLinks = document.querySelectorAll("nav a[href^='#']"); 
-
-            sections.forEach(section => {
-                ScrollTrigger.create({
-                    trigger: section,
-                    start: "top 40%", // Triggers when the section reaches the upper-middle of the screen
-                    end: "bottom 40%",
-                    onToggle: self => {
-                        if (self.isActive) {
-                            // Step A: Reset all links to their default muted color
-                            navLinks.forEach(link => {
-                                link.classList.remove("text-white", "font-bold");
-                                link.classList.add("text-jb-text");
-                            });
-
-                            // Step B: Light up the link(s) that match the currently visible section
-                            const activeLinks = document.querySelectorAll(`nav a[href="#${section.id}"]`);
-                            activeLinks.forEach(link => {
-                                link.classList.remove("text-jb-text");
-                                link.classList.add("text-white", "font-bold"); // Bright white and bold
-                            });
-                        }
-                    }
                 });
-            });
+                gsap.set(".projects-header", { y: 20 });
+
+                // Animate the closing bracket at the bottom
+                gsap.to(".projects-footer", {
+                    scrollTrigger: {
+                        trigger: ".projects-grid",
+                        start: "bottom 90%",
+                        toggleActions: "play none none reverse"
+                    },
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+
+                // Stagger the Project Cards
+                // We use a slight rotation to make them feel like cards falling into place
+                const projectCards = gsap.utils.toArray('.project-card');
+                
+                gsap.fromTo(projectCards, 
+                    { opacity: 0, y: 50, rotationX: -10 }, 
+                    {
+                        scrollTrigger: {
+                            trigger: ".projects-grid",
+                            start: "top 75%", 
+                            toggleActions: "play none none reverse"
+                        },
+                        opacity: 1,
+                        y: 0,
+                        rotationX: 0,
+                        duration: 0.6,
+                        stagger: 0.15, // Delay between each card appearing
+                        ease: "power3.out"
+                    }
+                );
+
+                // --- SCROLL REVEAL: CONTACT & FOOTER ---
+                
+                // 1. Reveal the Terminal Window
+                gsap.to(".contact-terminal", {
+                    scrollTrigger: {
+                        trigger: "#contact",
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+                gsap.set(".contact-terminal", { y: 30 });
+
+                // 2. Stagger the Terminal Lines to simulate command execution
+                const terminalLines = gsap.utils.toArray('.terminal-line');
+                gsap.to(terminalLines, {
+                    scrollTrigger: {
+                        trigger: ".contact-terminal",
+                        start: "top 70%",
+                        toggleActions: "play none none reverse"
+                    },
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.4,
+                    stagger: 0.3, // Waits 0.3 seconds between each line appearing
+                    ease: "power2.out"
+                });
+                gsap.set(terminalLines, { x: -10 }); // Start slightly to the left
+
+                // 3. Fade in the Footer
+                gsap.to(".footer-content", {
+                    scrollTrigger: {
+                        trigger: "footer",
+                        start: "top 95%",
+                        toggleActions: "play none none reverse"
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+                gsap.set(".footer-content", { y: 20 });
+
+                // --- SCROLLSPY: ACTIVE NAVIGATION ---
+                // 1. Grab all sections that have an ID (Work, Projects, Contact)
+                const sections = document.querySelectorAll("section[id]");
+                // 2. Grab all internal navigation links (both desktop and mobile)
+                const navLinks = document.querySelectorAll("nav a[href^='#']"); 
+
+                sections.forEach(section => {
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start: "top 40%", // Triggers when the section reaches the upper-middle of the screen
+                        end: "bottom 40%",
+                        onToggle: self => {
+                            if (self.isActive) {
+                                // Step A: Reset all links to their default muted color
+                                navLinks.forEach(link => {
+                                    link.classList.remove("text-white", "font-bold");
+                                    link.classList.add("text-jb-text");
+                                });
+
+                                // Step B: Light up the link(s) that match the currently visible section
+                                const activeLinks = document.querySelectorAll(`nav a[href="#${section.id}"]`);
+                                activeLinks.forEach(link => {
+                                    link.classList.remove("text-jb-text");
+                                    link.classList.add("text-white", "font-bold"); // Bright white and bold
+                                });
+                            }
+                        }
+                    });
+                });
+            }
         });
     </script>
 </body>
