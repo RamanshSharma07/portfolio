@@ -86,38 +86,44 @@
                 </p>
             </div>
             
-            <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center md:justify-start overflow-hidden">
+            <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center md:justify-start overflow-hidden w-full">
                 <div class="hero-btn w-full sm:w-auto">
-                    <a href="#projects" class="block bg-jb-blue hover:bg-blue-400 text-jb-bg px-8 py-3 rounded font-bold transition-colors text-center">
+                    <a href="#projects" class="block bg-jb-blue hover:bg-blue-400 text-jb-bg px-8 py-3 rounded font-bold transition-colors text-center whitespace-nowrap">
                         Run Projects ▶
                     </a>
                 </div>
                 <div class="hero-btn w-full sm:w-auto">
-                    <a href="#contact" class="block border border-jb-border hover:border-jb-text px-8 py-3 rounded font-medium transition-colors text-center bg-jb-surface">
+                    <a href="#contact" class="block border border-jb-border hover:border-jb-text px-8 py-3 rounded font-medium transition-colors text-center bg-jb-surface whitespace-nowrap">
                         System.out.println("Contact")
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="relative order-1 md:order-2 hero-image-container">
-            <div class="relative hero-float">
-                <div class="w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-jb-surface shadow-2xl relative z-10 mx-auto">
+        <div class="relative order-1 md:order-2 hero-image-container mt-8 mb-8 md:my-0">
+            
+            <div class="relative hero-float mx-auto w-max">
+                
+                <div class="w-48 h-48 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-jb-surface shadow-2xl relative z-10">
                     <img src="pic.png" alt="Ramansh Sharma" class="w-full h-full object-cover bg-jb-surface">
                 </div>
 
-                <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 md:-bottom-6 md:left-auto md:translate-x-0 md:-right-4 z-20 bg-jb-surface/90 backdrop-blur-md border border-jb-border p-3 rounded-xl shadow-xl flex items-center gap-3 w-max max-w-none hero-badge"> 
-                    <div class="w-10 h-10 bg-jb-bg rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-jb-border">
-                        <span class="text-jb-green text-xl">⚡</span>
+                <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 md:-bottom-4 md:left-auto md:translate-x-0 md:-right-6 z-20 w-max max-w-none">
+    
+                    <div class="hero-badge bg-jb-surface/90 backdrop-blur-md border border-jb-border p-3 rounded-xl shadow-xl flex items-center gap-3"> 
+                        <div class="w-10 h-10 bg-jb-bg rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-jb-border">
+                            <span class="text-jb-green text-xl">⚡</span>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold text-xs md:text-sm whitespace-nowrap">
+                                Software Developer @ ESC
+                            </p>
+                            <p class="text-jb-text font-mono text-[10px] md:text-xs mt-0.5 flex items-center gap-1 whitespace-nowrap">
+                                // Funded by Govt of India 🇮🇳
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-white font-bold text-xs md:text-sm whitespace-nowrap">
-                            Software Developer @ ESC
-                        </p>
-                        <p class="text-jb-text font-mono text-[10px] md:text-xs mt-0.5 flex items-center gap-1 whitespace-nowrap">
-                            // Funded by Govt of India 🇮🇳
-                        </p>
-                    </div>
+                    
                 </div>
                 
                 <div class="absolute inset-0 bg-jb-blue blur-[80px] opacity-10 -z-10 rounded-full"></div>
@@ -408,6 +414,20 @@
                     > Whether you have a question about Clean Architecture or just want to say hi, my inbox is open!
                 </div>
 
+                <div class="terminal-line opacity-0 text-jb-text mb-6 pl-4 flex items-center gap-3">
+                    <span class="font-mono">> Email: <span id="email-text" class="text-jb-green select-all">ramanshsharma53@gmail.com</span></span>
+                    
+                    <button id="copy-btn" class="p-1.5 bg-jb-surface border border-jb-border rounded hover:border-jb-text transition-colors relative group" aria-label="Copy Email">
+                        <svg class="w-4 h-4 text-jb-text group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        
+                        <span id="copy-tooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-jb-green text-jb-bg text-xs font-bold px-2 py-1 rounded opacity-0 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                            Copied!
+                        </span>
+                    </button>
+                </div>
+
                 <div class="terminal-line opacity-0 flex gap-2 mb-6">
                     <span class="text-jb-green">ramansh@dev:~$</span>
                     <span class="text-white">execute contact_methods</span>
@@ -445,6 +465,33 @@
     </section>
 
     <script>
+        // --- COPY TO CLIPBOARD LOGIC ---
+        const copyBtn = document.getElementById('copy-btn');
+        const tooltip = document.getElementById('copy-tooltip');
+        const emailToCopy = "ramanshsharma53@gmail.com";
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                // Write to clipboard
+                await navigator.clipboard.writeText(emailToCopy);
+                
+                // Show "Copied!" tooltip
+                tooltip.classList.remove('opacity-0');
+                tooltip.classList.add('opacity-100');
+                
+                // Change the border color briefly to green for extra feedback
+                copyBtn.classList.add('border-jb-green');
+                
+                // Hide tooltip after 2 seconds
+                setTimeout(() => {
+                    tooltip.classList.remove('opacity-100');
+                    tooltip.classList.add('opacity-0');
+                    copyBtn.classList.remove('border-jb-green');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        });
         document.addEventListener("DOMContentLoaded", (event) => {
             // --- MOBILE MENU LOGIC ---
             const btn = document.getElementById('mobile-menu-btn');
@@ -659,6 +706,36 @@
                 ease: "power2.out"
             });
             gsap.set(".footer-content", { y: 20 });
+
+            // --- SCROLLSPY: ACTIVE NAVIGATION ---
+            // 1. Grab all sections that have an ID (Work, Projects, Contact)
+            const sections = document.querySelectorAll("section[id]");
+            // 2. Grab all internal navigation links (both desktop and mobile)
+            const navLinks = document.querySelectorAll("nav a[href^='#']"); 
+
+            sections.forEach(section => {
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: "top 40%", // Triggers when the section reaches the upper-middle of the screen
+                    end: "bottom 40%",
+                    onToggle: self => {
+                        if (self.isActive) {
+                            // Step A: Reset all links to their default muted color
+                            navLinks.forEach(link => {
+                                link.classList.remove("text-white", "font-bold");
+                                link.classList.add("text-jb-text");
+                            });
+
+                            // Step B: Light up the link(s) that match the currently visible section
+                            const activeLinks = document.querySelectorAll(`nav a[href="#${section.id}"]`);
+                            activeLinks.forEach(link => {
+                                link.classList.remove("text-jb-text");
+                                link.classList.add("text-white", "font-bold"); // Bright white and bold
+                            });
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
