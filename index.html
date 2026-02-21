@@ -364,6 +364,68 @@
         </div>
     </section>
 
+    <section id="contact" class="max-w-4xl mx-auto px-6 pt-32 pb-12">
+        
+        <div class="bg-jb-bg border border-jb-border rounded-lg overflow-hidden shadow-2xl contact-terminal opacity-0">
+            <div class="bg-jb-surface border-b border-jb-border px-4 py-2 flex items-center gap-2">
+                <div class="flex gap-1.5">
+                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                </div>
+                <span class="ml-4 text-jb-text font-mono text-xs">Terminal - Local</span>
+            </div>
+            
+            <div class="p-6 md:p-8 font-mono text-sm md:text-base">
+                
+                <div class="terminal-line opacity-0 flex gap-2 mb-4">
+                    <span class="text-jb-green">ramansh@dev:~$</span>
+                    <span class="text-white">./status --current</span>
+                </div>
+                
+                <div class="terminal-line opacity-0 text-jb-text mb-6 pl-4 border-l-2 border-jb-border leading-relaxed">
+                    > Ready to build something scalable.<br>
+                    > Specialization: <span class="text-jb-orange">Android</span> && <span class="text-jb-blue">Compose Multiplatform</span>.<br>
+                    > Secondary targets: Available for <span class="text-jb-green">Backend</span> (Spring Boot, Supabase) || <span class="text-jb-purple">Web Development</span> roles.<br>
+                    > Whether you have a question about Clean Architecture or just want to say hi, my inbox is open!
+                </div>
+
+                <div class="terminal-line opacity-0 flex gap-2 mb-6">
+                    <span class="text-jb-green">ramansh@dev:~$</span>
+                    <span class="text-white">execute contact_methods</span>
+                </div>
+
+                <div class="terminal-line opacity-0 flex flex-col sm:flex-row gap-4 pl-4">
+                    <a href="mailto:ramanshsharma53@gmail.com" class="bg-jb-blue hover:bg-blue-400 text-jb-bg font-bold px-6 py-3 rounded transition-colors text-center font-sans">
+                        System.out.println("Say Hello 👋")
+                    </a>
+                    <a href="https://www.linkedin.com/in/ramansh-sharma-697641262" target="_blank" class="border border-jb-border hover:border-jb-text text-white font-medium px-6 py-3 rounded transition-colors text-center bg-jb-surface font-sans">
+                        connect(LinkedIn)
+                    </a>
+                </div>
+                
+                <div class="mt-6 flex gap-2 items-center">
+                    <span class="text-jb-green">ramansh@dev:~$</span>
+                    <div class="w-2.5 h-5 bg-jb-text animate-pulse"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="mt-24 pt-8 border-t border-jb-border flex flex-col md:flex-row justify-between items-center gap-4 footer-content opacity-0">
+            <div class="text-jb-text text-sm font-mono">
+                <p>// &copy; 2026 Ramansh Sharma. Built with Tailwind & GSAP.</p>
+            </div>
+            
+            <div class="flex gap-6 font-mono text-sm">
+                <a href="https://github.com/RamanshSharma07" target="_blank" class="text-jb-text hover:text-white transition-colors">github</a>
+                <a href="https://www.linkedin.com/in/ramansh-sharma-697641262" target="_blank" class="text-jb-text hover:text-white transition-colors">linkedin</a>
+                <a href="mailto:ramanshsharma53@gmail.com" class="text-jb-text hover:text-white transition-colors">email</a>
+            </div>
+        </footer>
+
+    </section>
+
     <script>
         document.addEventListener("DOMContentLoaded", (event) => {
             gsap.registerPlugin(ScrollTrigger);
@@ -505,6 +567,52 @@
                     ease: "power3.out"
                 }
             );
+
+            // --- SCROLL REVEAL: CONTACT & FOOTER ---
+            
+            // 1. Reveal the Terminal Window
+            gsap.to(".contact-terminal", {
+                scrollTrigger: {
+                    trigger: "#contact",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+            gsap.set(".contact-terminal", { y: 30 });
+
+            // 2. Stagger the Terminal Lines to simulate command execution
+            const terminalLines = gsap.utils.toArray('.terminal-line');
+            gsap.to(terminalLines, {
+                scrollTrigger: {
+                    trigger: ".contact-terminal",
+                    start: "top 70%",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                x: 0,
+                duration: 0.4,
+                stagger: 0.3, // Waits 0.3 seconds between each line appearing
+                ease: "power2.out"
+            });
+            gsap.set(terminalLines, { x: -10 }); // Start slightly to the left
+
+            // 3. Fade in the Footer
+            gsap.to(".footer-content", {
+                scrollTrigger: {
+                    trigger: "footer",
+                    start: "top 95%",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+            gsap.set(".footer-content", { y: 20 });
         });
     </script>
 </body>
