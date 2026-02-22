@@ -30,6 +30,39 @@
             }
         }
     </script>
+    <style>
+        /* --- CUSTOM IDE SCROLLBAR --- */
+        /* For WebKit browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E1F22; /* jb-bg */
+            border-left: 1px solid #393B40; /* jb-border */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #393B40; /* jb-border */
+            border-radius: 8px;
+            border: 4px solid #1E1F22; /* Creates a clean "padded" look */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #56A8F5; /* jb-blue on hover for a nice interactive feel */
+        }
+
+        /* For Firefox */
+        * {
+            scrollbar-width: auto;
+            scrollbar-color: #393B40 #1E1F22;
+        }
+
+        @keyframes sharp-blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .animate-sharp-blink {
+            animation: sharp-blink 1s infinite;
+        }
+    </style>
 </head>
 <body class="bg-jb-bg text-jb-text font-sans min-h-screen selection:bg-jb-blue/30 selection:text-white overflow-x-hidden">
 
@@ -88,13 +121,13 @@
             
             <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center md:justify-start overflow-hidden w-full">
                 <div class="hero-btn w-full sm:w-auto">
-                    <a href="#projects" class="block bg-jb-blue hover:bg-blue-400 text-jb-bg px-8 py-3 rounded font-bold transition-colors text-center whitespace-nowrap">
-                        Run Projects ▶
+                    <a href="#projects" class="block bg-jb-blue hover:bg-blue-400 text-jb-bg px-8 py-3 rounded font-bold transition-all duration-300 text-center whitespace-nowrap transform hover:-translate-y-1">
+                        View Projects
                     </a>
                 </div>
                 <div class="hero-btn w-full sm:w-auto">
-                    <a href="#contact" class="block border border-jb-border hover:border-jb-text px-8 py-3 rounded font-medium transition-colors text-center bg-jb-surface whitespace-nowrap">
-                        System.out.println("Contact")
+                    <a href="#contact" class="block border border-jb-border hover:border-jb-text px-8 py-3 rounded font-medium transition-all duration-300 text-center bg-jb-surface whitespace-nowrap transform hover:-translate-y-1">
+                        System.out.println("Contact");
                     </a>
                 </div>
             </div>
@@ -434,17 +467,17 @@
                 </div>
 
                 <div class="terminal-line opacity-0 flex flex-col sm:flex-row gap-4 pl-4">
-                    <a href="mailto:ramanshsharma53@gmail.com" class="bg-jb-blue hover:bg-blue-400 text-jb-bg font-bold px-6 py-3 rounded transition-colors text-center font-sans">
-                        System.out.println("Say Hello 👋")
+                    <a href="mailto:ramanshsharma53@gmail.com" class="bg-jb-blue hover:bg-blue-400 text-jb-bg font-bold px-4 py-3 sm:px-6 rounded transition-all duration-300 transform hover:-translate-y-1 text-center font-sans text-sm sm:text-base whitespace-nowrap">
+                        System.out.println("Say Hello 👋");
                     </a>
-                    <a href="https://www.linkedin.com/in/ramansh-sharma-697641262" target="_blank" class="border border-jb-border hover:border-jb-text text-white font-medium px-6 py-3 rounded transition-colors text-center bg-jb-surface font-sans">
-                        connect(LinkedIn)
+                    <a href="https://www.linkedin.com/in/ramansh-sharma-697641262" target="_blank" class="border border-jb-border hover:border-white text-white font-medium px-4 py-3 sm:px-6 rounded transition-all duration-300 transform hover:-translate-y-1 text-center bg-jb-surface font-sans text-sm sm:text-base whitespace-nowrap">
+                        connect(LinkedIn);
                     </a>
                 </div>
                 
                 <div class="mt-6 flex gap-2 items-center">
                     <span class="text-jb-green">ramansh@dev:~$</span>
-                    <div class="w-2.5 h-5 bg-jb-text animate-pulse"></div>
+                    <div class="w-[2px] h-5 bg-jb-text animate-sharp-blink"></div>
                 </div>
 
             </div>
@@ -494,6 +527,19 @@
         });
 
         document.addEventListener("DOMContentLoaded", (event) => {
+
+            // --- THE "TAB SWITCH" EASTER EGG ---
+            let originalTitle = document.title;
+            
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    // When user switch to another tab
+                    document.title = "Exception in thread \"main\" 🐛";
+                } else {
+                    // When user comes back
+                    document.title = originalTitle;
+                }
+            });
             
             // --- MOBILE MENU LOGIC ---
             const btn = document.getElementById('mobile-menu-btn');
